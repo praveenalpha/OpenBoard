@@ -1,0 +1,142 @@
+*{
+    box-sizing: border-box;
+}
+body,html{
+    margin:0px;
+    padding:0px;
+}
+.tools{
+    height: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.active{
+    display: block !important;
+}
+
+
+.tool-items{
+    display: flex;
+    justify-content: space-evenly;
+    background: aliceblue;
+    height: 100%;
+    align-items: center;
+    width: 80%;
+    border-radius: 26px;
+    /* position: relative; */
+    /* left: 60px; */
+}
+.active-tool{
+    border: 2px solid deepskyblue;
+    border-radius: 30px;
+}
+.tool{
+    height: 60px;
+    position: relative;
+    padding: 10px;
+}
+.tool-img{
+    height: 100%;
+    transition : transform 0.2s;
+}
+.tool-img img{
+    height: 100%;
+}
+
+.tool-options{
+    display: none;
+    height: 110px;
+    width: 160px;
+    position: absolute;
+    background: gainsboro;
+    top: 65px;
+    left: -55px;
+    border-radius: 20px;
+}
+.pencil-slider{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid; */
+    height: 40%;
+}
+.eraser-slider{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid; */
+    height: 100%;
+}
+.color-options{
+    height: 60%;
+    /* border: 1px solid; */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.color-options div{
+    height: 30px;
+    width: 30px;
+    border-radius: 20px;
+}
+.black{
+background: black;
+}
+.red{
+background: #e74c3c;
+}
+.blue{
+background: #3498db;
+}
+.yellow{
+background: #f1c40f;
+}
+.tool-img:hover{
+    transform: scale(1.2);
+}
+
+.drawing-area{
+    height: calc(100vh - 50px);
+}
+
+.stickyPad{
+    height: 200px;
+    width: 263px;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+}
+
+.nav{
+    height: 35px;
+    background: lightsteelblue;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.minimize{
+    background: greenyellow;
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+.close{
+    background: red;
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+    margin-right: 5px;
+}
+
+.content{
+    height: 165px;
+}
+.uploaded-img{
+    height:100%;
+    width:100%;
+}
+.sticky{
+
+}
