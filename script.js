@@ -1,33 +1,30 @@
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
-let points = [];
-let redoPoints = [];
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
-// ctx.fillStyle = "red";
-// ctx.fillRect(100, 100 , 150 , 100);
+let points = []; //db to store the points, used to redraw
+let removedPoints = [];
+
 window.addEventListener("resize", function () {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   redraw();
 });
 
-// ctx.beginPath();
-// ctx.moveTo(100 , 100);
-// ctx.lineTo(200 , 100);
-// ctx.lineTo(200 , 300);
-// ctx.stroke();
+let isPenDown = false;
 ctx.lineWidth = 10;
 
-let isPenDown = false;
+//To Draw Functions
 canvas.addEventListener("mousedown", function (e) {
+  //clientX,Y gives the x,y coord relative to window top, but we need wrt to canvas, so subtract top from Y coord
+  //get the top y coord of canvas
   let { top } = canvas.getBoundingClientRect();
   let x = e.clientX;
   let y = e.clientY - top;
   let point = {
-    id: "md",
     x: x,
     y: y,
+    id: "md",
     color: ctx.strokeStyle,
     width: ctx.lineWidth,
   };
@@ -35,6 +32,8 @@ canvas.addEventListener("mousedown", function (e) {
   ctx.beginPath();
   ctx.moveTo(x, y);
   isPenDown = true;
+
+  socket.emit("md", point);
 });
 
 canvas.addEventListener("mousemove", function (e) {
@@ -43,24 +42,26 @@ canvas.addEventListener("mousemove", function (e) {
     let x = e.clientX;
     let y = e.clientY - top;
     let point = {
-      id: "mm",
       x: x,
       y: y,
+      id: "mm",
       color: ctx.strokeStyle,
       width: ctx.lineWidth,
     };
     points.push(point);
     ctx.lineTo(x, y);
     ctx.stroke();
+
+    socket.emit("mm", point);
   }
 });
 
 canvas.addEventListener("mouseup", function (e) {
   isPenDown = false;
   ctx.closePath();
-  // console.log(points);
 });
 
+//redraw whenever the window is resized
 function redraw() {
   for (let i = 0; i < points.length; i++) {
     let point = points[i];
@@ -74,31 +75,36 @@ function redraw() {
       ctx.stroke();
     }
   }
+  ctx.strokeStyle = currStrokeStyle;
+  ctx.lineWidth = currLineWidth;
+
+  console.log("calling redraw");
+  socket.emit("redraw", points);
 }
 
 function undoPoints() {
-  let redoPoint = [];
-  // 1. remove point from points
-  if (points.length >= 2) {
-    let idx = points.length - 1;
-    while (points[idx].id != "md") {
-      redoPoint.unshift(points.pop());
-      idx--;
-    }
-    redoPoint.unshift(points.pop());
+  //1. remove the last line from db
+  let lastRemovedPoints = [];
+  let i = points.length - 1;
+  while (i-- >= 0 && points[i].id != "md") {
+    lastRemovedPoints.unshift(points.pop());
   }
-  redoPoints.push(redoPoint);
-  // 2. clear canvas
-  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  // 3. redraw points
+  lastRemovedPoints.unshift(points.pop()); //to remove the last md
+  removedPoints.push(lastRemovedPoints);
+
+  //2. clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  //3. redraw the remaining lines
   redraw();
 }
 
-function redoLines() {
-  if (redoPoints.length >= 1) {
-    let redoPoint = redoPoints.pop();
-    for (let i = 0; i < redoPoint.length; i++) {
-      points.push(redoPoint[i]);
+function redoPoints() {
+  if (removedPoints.length >= 1) {
+    //add the last removed points back into the db
+    let removedPoint = removedPoints.pop();
+    for (let i = 0; i < removedPoint.length; i++) {
+      points.push(removedPoint[i]);
     }
     // 2. clear canvas
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
