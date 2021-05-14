@@ -1,81 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhiteBoard</title>
+
+    <!-- StyleSheets -->
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <!-- Tools -->
     <div class="tools">
-        <div class="tool-items">
-            <div class="tool active-tool" id="pencil">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Black_Pencil.svg" alt="">
-                </div>
-                <div class="tool-options" id="pencil-options">
-                    <div class="pencil-slider">
-                        <input type="range" name="" id="pencil-size" min="1" max="40" value="1">
-                    </div>
-                    <div class="color-options">
-                        <div class="black" id="black"></div>
-                        <div class="red" id="red"></div>
-                        <div class="blue" id="blue"></div>
-                        <div class="yellow" id="yellow"></div>
-                    </div>
-                </div>
+      <div class="tool-items">
+        <div class="tool active-tool" id="pencil">
+          <div class="tool-img">
+            <img
+              src="./resources/resources-master/NewIcons/Black_Pencil.svg"
+              alt=""
+            />
+          </div>
+          <div class="tool-options" id="pencil-options">
+            <div class="pencil-slider">
+              <input
+                type="range"
+                name=""
+                id="pencil-size"
+                min="1"
+                max="40"
+                value="1"
+              />
             </div>
-            <div class="tool" id="eraser">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Eraser.svg" alt="">
-                </div>
-                <div class="tool-options" id="eraser-options">
-                    <div class="eraser-slider">
-                        <input type="range" name="" id="eraser-size" min="1" max="40" value="1">
-                    </div>
-                </div>
+            <div class="color-options">
+              <div class="black" id="black"></div>
+              <div class="red" id="red"></div>
+              <div class="blue" id="blue"></div>
+              <div class="yellow" id="yellow"></div>
             </div>
-            <div class="tool" id="sticky">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/StickyNote.svg" alt="">
-                </div>
-            </div>
-            <div class="tool" id="upload-img">
-                <label for="upload">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Photo.svg" alt="">
-                </div>
-                    <input type="file" name="upload" id="upload" style="display: none;">
-                </label>
-                </div>
-            <div class="tool" id="download">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Download.svg" alt="">
-                </div>
-            </div>
-            <div class="tool" id="undo">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Undo.svg" alt="">
-                </div>
-            </div>
-            <div class="tool" id="redo">
-                <div class="tool-img">
-                    <img src="./resources-master/resources-master/NewIcons/Redo.svg" alt="">
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-    <div class="drawing-area">
-        <canvas id="canvas"></canvas>
+        <div class="tool" id="eraser">
+          <div class="tool-img">
+            <img
+              src="./resources/resources-master/NewIcons/Eraser.svg"
+              alt=""
+            />
+          </div>
+          <div class="tool-options" id="eraser-options">
+            <div class="eraser-slider">
+              <input
+                type="range"
+                name=""
+                id="eraser-size"
+                min="1"
+                max="40"
+                value="1"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="tool" id="sticky">
+          <div class="tool-img">
+            <img
+              src="./resources/resources-master/NewIcons/StickyNote.svg"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="tool" id="upload-img">
+          <label for="upload">
+            <div class="tool-img">
+              <img
+                src="./resources/resources-master/NewIcons/Photo.svg"
+                alt=""
+              />
+            </div>
+
+            <input
+              type="file"
+              name="upload"
+              id="upload"
+              style="display: none"
+            />
+          </label>
+        </div>
+        <div class="tool" id="download">
+          <div class="tool-img">
+            <img
+              src="./resources/resources-master/NewIcons/Download.svg"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="tool" id="undo">
+          <div class="tool-img">
+            <img src="./resources/resources-master/NewIcons/Undo.svg" alt="" />
+          </div>
+        </div>
+        <div class="tool" id="redo">
+          <div class="tool-img">
+            <img src="./resources/resources-master/NewIcons/Redo.svg" alt="" />
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- variables defined in a file can be used in file which is 
-        imported below that file where variable is declared -->
+    <!-- Drawing Area -->
+    <div class="drawing-area">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Scripts -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+      integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const socket = io.connect("https://my-whiteboard-app.herokuapp.com/");
+    </script>
     <script src="./script.js"></script>
     <script src="./tools.js"></script>
     <script src="./sticky.js"></script>
     <script src="./img.js"></script>
     <script src="./util.js"></script>
-
-</body>
+    <script src="./receiver.js"></script>
+  </body>
 </html>
